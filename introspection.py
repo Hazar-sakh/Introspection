@@ -9,15 +9,15 @@ def introspection_info(obj):
     tp = tp[1]
     tp = tp.replace('>', '')
 
-    # Получаем атрибуты и методы и разделяем их по спискам через фильтр на __
+    # Получаем атрибуты и методы и разделяем их по спискам через фильтр на __ и по callable
     attr = []
     meth = []
     loatr = dir(obj)
     for i in loatr:
-        if '__' in i:
-            meth.append(i)
-        else:
+        if not '__' in i and not callable(getattr(obj, i)):
             attr.append(i)
+        elif callable(getattr(obj, i)):
+            meth.append(i)
 
     # Определяем модуль к которому принадлежит объект
     mod = str(inspect.getmodule(introspection_info))
